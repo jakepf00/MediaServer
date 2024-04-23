@@ -23,7 +23,7 @@ class base_case(object):
             handler.handle_error(msg)
     
     def run_cgi(self, handler, full_path):
-        cmd = "python " + full_path
+        cmd = "python " + ' '.join(full_path.split('?'))
         process = os.popen(cmd)
         data = process.read().encode("utf-8")
         process.close()
@@ -61,7 +61,8 @@ class case_cgi_file(base_case):
     '''Something runnable'''
 
     def test(self, handler):
-        return os.path.isfile(handler.full_path) and handler.full_path.endswith('.py')
+        full_path_split = handler.full_path.split('?')
+        return os.path.isfile(full_path_split[0]) and full_path_split[0].endswith('.py')
     
     def act(self, handler):
         self.run_cgi(handler, handler.full_path)

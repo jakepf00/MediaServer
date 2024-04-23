@@ -3,11 +3,11 @@ import os
 import Cases
 
 class RequestHandler(http.server.BaseHTTPRequestHandler):
-    Cases = [Cases.case_no_file(),
-             Cases.case_cgi_file(),
+    Cases = [Cases.case_cgi_file(),
              Cases.case_existing_file(),
              Cases.case_directory_index_file(),
              Cases.case_directory_no_index_file(),
+             Cases.case_no_file(),
              Cases.case_always_fail()]
 
     Error_Page = '''\
