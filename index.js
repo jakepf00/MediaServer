@@ -50,3 +50,17 @@ function sortTracks() {
         }
     }
 }
+
+var isPlaying = false;
+function playAudio() {
+    player = document.getElementById("player");
+    player.paused ? player.play() : player.pause();
+
+    document.getElementById("playButton").classList.toggle("paused");
+}
+
+function adjustVolume() {
+    volumeSlider = document.getElementById("volumeSlider");
+    player = document.getElementById("player");
+    player.volume = volumeSlider.value / 100.0;
+}
