@@ -31,7 +31,10 @@ with tag('html'):
                 doc.stag('source', src='{0}'.format(str(curSong[1])))
         with tag('h2'):
             text('Tracks')
-        doc.stag('input', type="text", id="trackFilterInput", onkeyup="filterTracks()", plackholder="Search for track...")
+        doc.stag('input', type="text", id="trackFilterInput", onkeyup="filterTracks()", placeholder="Search for track...")
+        text('Sort by:')
+        with tag('button', onclick="sortTracks()"):
+            text('Title')
         with tag('ul', id='tracksUL'):
             for row in cur.execute("SELECT * FROM files").fetchall():
                 with tag('li'):
