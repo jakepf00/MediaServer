@@ -19,8 +19,8 @@ doc, tag, text = Doc().tagtext()
 doc.stag('!DOCTYPE', html='')
 with tag('html'):
     with tag('head'):
-        doc.stag('link', rel='stylesheet', href='index.css')
-        with tag('script', src='index.js'):
+        doc.stag('link', rel='stylesheet', href='index/index.css')
+        with tag('script', src='index/index.js'):
             text('')
     with tag('body'):
         with tag('h1'):
@@ -34,7 +34,7 @@ with tag('html'):
         with tag('ul', id='tracksUL'):
             for row in cur.execute("SELECT * FROM files").fetchall():
                 with tag('li'):
-                    with tag('a', href='index.py?song='+str(row[0])):
+                    with tag('a', href='index?song='+str(row[0])):
                         # Use song name if it exists, else use filename
                         # TODO: function to generate song name from title or filename (use later in footer)
                         if (row[2] != ""):

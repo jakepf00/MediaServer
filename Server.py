@@ -1,15 +1,7 @@
 import http.server
 import os
-import Cases
 
 class RequestHandler(http.server.BaseHTTPRequestHandler):
-    Cases = [Cases.case_cgi_file(),
-             Cases.case_existing_file(),
-             Cases.case_directory_index_file(),
-             Cases.case_directory_no_index_file(),
-             Cases.case_no_file(),
-             Cases.case_always_fail()]
-
     Error_Page = '''\
 <html>
 <body>
@@ -22,14 +14,30 @@ class RequestHandler(http.server.BaseHTTPRequestHandler):
     # Classify and handle request
     def do_GET(self):
         try:
-            # Figure out what exactly is being requested
             self.full_path = os.getcwd() + self.path
-
-            # Figure out how to handle it
-            for case in self.Cases:
-                if case.test(self):
-                    case.act(self)
-                    break
+            temp = self.full_path.split('?')
+            if len(temp) > 1:
+                full_path, queries = temp[0], temp[1]
+            else:
+                full_path = self.full_path
+            
+            # Run CGI file
+            if os.path.isdir(full_path):
+                filename = full_path.split('/')[1]
+                cmd = "python " + full_path + "/" + filename + ".py " + queries
+                process = os.popen(cmd)
+                data = process.read().encode("utf-8")
+                process.close()
+                self.send_content(data)
+            # Send other file
+            elif os.path.isfile(full_path):
+                try:
+                    with open(full_path, 'rb') as reader:
+                        content = reader.read()
+                    self.send_content(content)
+                except IOError as msg:
+                    msg = "'{0}' cannot be read: {1}".format(full_path, msg)
+                    self.handle_error(msg)
             
         # Handle errors
         except Exception as msg:
