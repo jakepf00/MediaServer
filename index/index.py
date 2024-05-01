@@ -1,6 +1,18 @@
 import sqlite3
 import sys
 from yattag import Doc
+from enum import IntEnum
+
+class SongData(IntEnum):
+    id = 0
+    file_path = 1
+    title = 2
+    album = 3
+    artist = 4
+    band = 5
+    conductor = 6
+    composer = 7
+    track = 8
 
 # Parse URL
 queries = {}
@@ -37,20 +49,20 @@ with tag('html'):
                     with tag('a', href='index?song='+str(row[0])):
                         # Use song name if it exists, else use filename
                         # TODO: function to generate song name from title or filename (use later in footer)
-                        if (row[2] != ""):
-                            text(row[2])
+                        if (row[SongData.title] != ""):
+                            text(row[SongData.title])
                         else:
-                            text(row[1])
+                            text(row[SongData.file_path])
         with tag('div', klass="footer"):
             if 'song' in queries:
                 curSong = cur.execute("SELECT * FROM files WHERE id={0}".format(queries['song'])).fetchone()
                 with tag('audio', id="player"):
                     doc.stag('source', src='{0}'.format(str(curSong[1])))
                 with tag('h3'):
-                    if (curSong[2] != ""):
-                        text(curSong[2])
+                    if (curSong[SongData.title] != ""):
+                        text(curSong[SongData.title])
                     else:
-                        text(curSong[1])
+                        text(curSong[SongData.file_path])
                 with tag('div', id="audioControls"):
                     with tag('button', id="playButton", onclick="playAudio()"):
                         text('Play/Pause')
