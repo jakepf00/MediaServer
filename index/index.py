@@ -1,28 +1,24 @@
 import sqlite3
 import sys
 from yattag import Doc
-from enum import IntEnum
 
-class SongData(IntEnum):
-    id = 0
-    file_path = 1
-    title = 2
-    album = 3
-    artist = 4
-    band = 5
-    conductor = 6
-    composer = 7
-    track = 8
+# Establish database connection
+con = sqlite3.connect("media.db")
+cur = con.cursor()
+
+def getSongName(id):
+    song = cur.execute("SELECT title, file_path FROM files WHERE id={0}".format(id)).fetchone()
+    # Use song name if it exists, else use filename
+    if (song[0] != ""):
+        return song[0]
+    else:
+        return song[1]
 
 # Parse URL
 queries = {}
 for query in sys.argv[1:]:
     query_split = query.split('=')
     queries[query_split[0]] = query_split[1]
-
-# Establish database connection
-con = sqlite3.connect("media.db")
-cur = con.cursor()
 
 # Yattag document setup
 doc, tag, text = Doc().tagtext()
@@ -44,25 +40,17 @@ with tag('html'):
         with tag('button', onclick="sortTracks()"):
             text('Title')
         with tag('ul', id='tracksUL'):
-            for row in cur.execute("SELECT * FROM files").fetchall():
+            for song in cur.execute("SELECT id FROM files").fetchall():
                 with tag('li'):
-                    with tag('a', href='index?song='+str(row[0])):
-                        # Use song name if it exists, else use filename
-                        # TODO: function to generate song name from title or filename (use later in footer)
-                        if (row[SongData.title] != ""):
-                            text(row[SongData.title])
-                        else:
-                            text(row[SongData.file_path])
+                    with tag('a', href='index?song='+str(song[0])):
+                        text(str(getSongName(song[0])))
         with tag('div', klass="footer"):
             if 'song' in queries:
-                curSong = cur.execute("SELECT * FROM files WHERE id={0}".format(queries['song'])).fetchone()
+                curSong = cur.execute("SELECT file_path FROM files WHERE id={0}".format(queries['song'])).fetchone()
                 with tag('audio', id="player"):
-                    doc.stag('source', src='{0}'.format(str(curSong[1])))
+                    doc.stag('source', src='{0}'.format(str(curSong[0])))
                 with tag('h3'):
-                    if (curSong[SongData.title] != ""):
-                        text(curSong[SongData.title])
-                    else:
-                        text(curSong[SongData.file_path])
+                    text(getSongName(queries['song']))
                 with tag('div', id="audioControls"):
                     with tag('button', id="playButton", onclick="playAudio()"):
                         text('Play/Pause')
