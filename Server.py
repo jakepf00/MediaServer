@@ -1,5 +1,6 @@
 import http.server
 import os
+from urllib.parse import urlparse, parse_qs
 
 class RequestHandler(http.server.BaseHTTPRequestHandler):
     Error_Page = '''\
@@ -14,30 +15,26 @@ class RequestHandler(http.server.BaseHTTPRequestHandler):
     # Classify and handle request
     def do_GET(self):
         try:
-            self.full_path = os.getcwd() + self.path
-            temp = self.full_path.split('?')
-            if len(temp) > 1:
-                full_path, queries = temp[0], temp[1]
-            else:
-                full_path = self.full_path
-                queries = ""
+            parsed_url = urlparse(self.path)
+            queries = parse_qs(parsed_url.query)
+            self.full_path = os.getcwd() + parsed_url.path
             
             # Run CGI file
-            if os.path.isdir(full_path):
-                filename = full_path.split('/')[1]
-                cmd = "python " + full_path + "/" + filename + ".py " + queries
+            if os.path.isdir(self.full_path):
+                filename = self.full_path.split('/')[1]
+                cmd = "python " + self.full_path + "/" + filename + ".py " + " ".join([key + "=" + val[0] for key, val in queries.items()])
                 process = os.popen(cmd)
                 data = process.read().encode("utf-8")
                 process.close()
                 self.send_content(data)
             # Send other file
-            elif os.path.isfile(full_path):
+            elif os.path.isfile(self.full_path):
                 try:
-                    with open(full_path, 'rb') as reader:
+                    with open(self.full_path, 'rb') as reader:
                         content = reader.read()
                     self.send_content(content)
                 except IOError as msg:
-                    msg = "'{0}' cannot be read: {1}".format(full_path, msg)
+                    msg = "'{0}' cannot be read: {1}".format(self.full_path, msg)
                     self.handle_error(msg)
             
         # Handle errors
