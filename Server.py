@@ -20,6 +20,7 @@ class RequestHandler(http.server.BaseHTTPRequestHandler):
                 full_path, queries = temp[0], temp[1]
             else:
                 full_path = self.full_path
+                queries = ""
             
             # Run CGI file
             if os.path.isdir(full_path):
