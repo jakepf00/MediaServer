@@ -40,16 +40,19 @@ with tag('html'):
         with tag('button', onclick="sortTracks()"):
             text('Title')
         with tag('ul', id='tracksUL'):
-            for song in cur.execute("SELECT id FROM files").fetchall():
+            for song in cur.execute("SELECT id, file_path, title FROM files").fetchall():
                 with tag('li'):
-                    with tag('a', href='index?song='+str(song[0])):
+                    songId = song[0]
+                    filePath = str(song[1]).replace("\\", "\\\\")
+                    songName = song[2]
+                    with tag('a', onclick='loadSong(\"{0}\",\"{1}\",\"{2}\")'.format(songId, filePath, songName)):
                         text(str(getSongName(song[0])))
         with tag('div', klass="footer"):
             if 'song' in queries:
                 curSong = cur.execute("SELECT file_path FROM files WHERE id={0}".format(queries['song'])).fetchone()
                 with tag('audio', id="player"):
-                    doc.stag('source', src='{0}'.format(str(curSong[0])))
-                with tag('h3'):
+                    doc.stag('source', id='audioSource', src='{0}'.format(str(curSong[0])))
+                with tag('h3', id="currentSongTitle"):
                     text(getSongName(queries['song']))
                 with tag('div', id="audioControls"):
                     with tag('button', id="playButton", onclick="playAudio()"):

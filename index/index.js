@@ -1,3 +1,21 @@
+function loadSong(songId, filePath, songName) {
+    // Update audio player source - load the new song and play it
+    audioSource = document.getElementById("audioSource");
+    audio = document.getElementById("player");
+    audioSource.setAttribute("src", filePath);
+    audio.load();
+    audio.play();
+
+    // Update song name in media controls area
+    songName = songName == "" ? filePath : songName;
+    songTitle = document.getElementById("currentSongTitle");
+    songTitle.innerHTML = songName;
+
+    // Update URL to match song that is now playing
+    newUrl = window.location.origin + "/index?song=" + songId;
+    history.pushState({}, songName, newUrl);
+}
+
 function filterTracks() {
     var input, filter, ul, li, a, i, txtValue;
     input = document.getElementById('trackFilterInput');
