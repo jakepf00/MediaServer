@@ -9,24 +9,24 @@
     margin-bottom: 12px;
 }
 
-#tracksUL {
+#trackList {
     list-style-type: none;
     padding: 0;
     margin: 0;
+    width: 100%;
 }
 
-#tracksUL li a {
-    border: 1px solid #ddd;
-    margin-top: -1px;
+#trackList tr {
     background-color: #f6f6f6;
-    padding: 12px;
-    text-decoration: none;
     font-size: 18px;
-    color: black;
-    display: block;
 }
 
-#tracksUL li a:hover:not(.header) {
+#trackList tr * {
+    padding: 12px;
+    border-color: black;
+}
+
+#trackList tr:hover:not(.header) {
     /* Add a hover effect to all links, except for headers */
     background-color: #eee;
 }

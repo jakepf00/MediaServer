@@ -36,17 +36,25 @@ with tag('html'):
         with tag('h2'):
             text('Tracks')
         doc.stag('input', type="text", id="trackFilterInput", onkeyup="filterTracks()", placeholder="Search for track...")
-        text('Sort by:')
-        with tag('button', onclick="sortTracks()"):
-            text('Title')
-        with tag('ul', id='tracksUL'):
-            for song in cur.execute("SELECT id, file_path, title FROM files").fetchall():
-                with tag('li'):
-                    songId = song[0]
-                    filePath = str(song[1]).replace("\\", "\\\\")
-                    songName = song[2]
-                    with tag('a', onclick='loadSong(\"{0}\",\"{1}\",\"{2}\")'.format(songId, filePath, songName)):
+        with tag('table', id='trackList'):
+            with tag('tr', klass='header'):
+                with tag('th', onclick="sortTracks(0)"):
+                    text("Title")
+                with tag('th', onclick="sortTracks(1)"):
+                    text("Artist")
+                with tag('th', onclick="sortTracks(2)"):
+                    text("Album")
+            for song in cur.execute("SELECT id, file_path, title, artist, album FROM files").fetchall():
+                songId = song[0]
+                filePath = str(song[1]).replace("\\", "\\\\")
+                songName = song[2]
+                with tag('tr', onclick='loadSong(\"{0}\",\"{1}\",\"{2}\")'.format(songId, filePath, songName)):
+                    with tag('td'):
                         text(str(getSongName(song[0])))
+                    with tag('td'):
+                        text(song[3])
+                    with tag('td'):
+                        text(song[4])
         with tag('div', klass="footer"):
             if 'song' in queries:
                 curSong = cur.execute("SELECT file_path FROM files WHERE id={0}".format(queries['song'])).fetchone()
