@@ -32,4 +32,7 @@ Navigate to localhost:8080/index in a web browser to access your music library.
 - Cookies? Remember song played...<br>
 - Playlist/queue<br>
 - Play non mp3 music<br>
-- Add song duration data to db
+- Add song duration data to db<br>
+- File upload from website<br>
+- id3 metadata editing from website<br>
+- Admin page<br>

@@ -36,8 +36,12 @@ with tag('html'):
     else:
         onload = ''
     with tag('body', onload=onload):
-        with tag('h1'):
-            text('Media Server')
+        with tag('div', klass="header"):
+            with tag('a', href="#", klass="logo"):
+                text("Media Server")
+            with tag('div', klass="header-right"):
+                with tag('a', href="#"):
+                    text("Settings")
         with tag('h2'):
             text('Tracks')
         doc.stag('input', type="text", id="trackFilterInput", onkeyup="filterTracks()", placeholder="Search for track...")
