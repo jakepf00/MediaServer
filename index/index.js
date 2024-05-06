@@ -17,19 +17,21 @@ function loadSong(songId, filePath, songName) {
 }
 
 function filterTracks() {
-    var input, filter, ul, li, a, i, txtValue;
-    input = document.getElementById('trackFilterInput');
+    var input, filter, table, tr, td, i, txtValue;
+    input = document.getElementById("trackFilterInput");
     filter = input.value.toUpperCase();
-    ul = document.getElementById("trackList");
-    li = ul.getElementsByTagName('li');
+    table = document.getElementById("trackList");
+    tr = table.getElementsByTagName("tr");
 
-    for (i = 0; i < li.length; i++) {
-        a = li[i].getElementsByTagName("a")[0];
-        txtValue = a.textContent || a.innerText;
-        if (txtValue.toUpperCase().indexOf(filter) > -1) {
-            li[i].style.display = "";
-        } else {
-            li[i].style.display = "none";
+    for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td")[0];
+        if (td) {
+            txtValue = td.textContent || td.innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                tr[i].style.display = "";
+            } else {
+                tr[i].style.display = "none";
+            }
         }
     }
 }
