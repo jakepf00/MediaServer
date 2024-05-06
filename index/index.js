@@ -1,15 +1,18 @@
-function loadSong(songId, filePath, songName) {
+function loadSong(songId, filePath, songName, firstLoad=false) {
     // Update audio player source - load the new song and play it
     audioSource = document.getElementById("audioSource");
     audio = document.getElementById("player");
     audioSource.setAttribute("src", filePath);
     audio.load();
-    audio.play();
+    if (!firstLoad) audio.play();
 
     // Update song name in media controls area
     songName = songName == "" ? filePath : songName;
     songTitle = document.getElementById("currentSongTitle");
     songTitle.innerHTML = songName;
+
+    // Make media controls visible
+    document.getElementById("audioControls").style.display = "";
 
     // Update URL to match song that is now playing
     newUrl = window.location.origin + "/index?song=" + songId;

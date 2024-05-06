@@ -23,15 +23,13 @@ Navigate to localhost:8080/index in a web browser to access your music library.
 
 # Planned Features/Fixes
 
-- Fix track filtering<br>
-- Fix selecting song when no song has been selected yet<br>
 - Allow spaces in filename<br>
 - Song time slider in media controls<br>
 - MediaScan.py - split up reading directories, id3 tagging, and database into functions<br>
 - Album view, artist view...<br>
 - Album covers<br>
 - Media controls - more...<br>
-- Actually make readme<br>
 - Cookies? Remember song played...<br>
 - Playlist/queue<br>
 - Play non mp3 music<br>
+- Add song duration data to db

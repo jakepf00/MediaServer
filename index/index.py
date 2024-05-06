@@ -30,7 +30,12 @@ with tag('html'):
         doc.stag('link', rel='stylesheet', href='index/index.css')
         with tag('script', src='index/index.js'):
             text('')
-    with tag('body'):
+    if 'song' in queries:
+        curSong = cur.execute("SELECT file_path FROM files WHERE id={0}".format(queries['song'])).fetchone()
+        onload = "loadSong(\"{0}\",\"{1}\",\"{2}\", true)".format(queries['song'], curSong[0].replace("\\", "\\\\"), getSongName(queries['song']))
+    else:
+        onload = ''
+    with tag('body', onload=onload):
         with tag('h1'):
             text('Media Server')
         with tag('h2'):
@@ -56,16 +61,14 @@ with tag('html'):
                     with tag('td'):
                         text(song[4])
         with tag('div', klass="footer"):
-            if 'song' in queries:
-                curSong = cur.execute("SELECT file_path FROM files WHERE id={0}".format(queries['song'])).fetchone()
-                with tag('audio', id="player"):
-                    doc.stag('source', id='audioSource', src='{0}'.format(str(curSong[0])))
-                with tag('h3', id="currentSongTitle"):
-                    text(getSongName(queries['song']))
-                with tag('div', id="audioControls"):
-                    with tag('button', id="playButton", onclick="playAudio()"):
-                        text('Play/Pause')
-                    doc.stag('input', type="range", min="0", max="100", value="100", klass="volumeSlider", id="volumeSlider", oninput="adjustVolume()")
+            with tag('audio', id="player"):
+                doc.stag('source', id='audioSource')
+            with tag('h3', id="currentSongTitle"):
+                text('')
+            with tag('div', id="audioControls", style="display: none;"):
+                with tag('button', id="playButton", onclick="playAudio()"):
+                    text('Play/Pause')
+                doc.stag('input', type="range", min="0", max="100", value="100", klass="volumeSlider", id="volumeSlider", oninput="adjustVolume()")
 
 # Returning HTML results
 print(doc.getvalue())
