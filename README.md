@@ -11,6 +11,7 @@ Media Scanner
 Web Server
 - URL parsing using urllib
 - Common Gateway Interface implementation to run python scripts
+- Support for byte-range requests to seek specific times in songs
 
 
 # Usage
@@ -23,16 +24,17 @@ Navigate to localhost:8080/index in a web browser to access your music library.
 
 # Planned Features/Fixes
 
-- Allow spaces in filename<br>
-- Song time slider in media controls<br>
-- MediaScan.py - split up reading directories, id3 tagging, and database into functions<br>
-- Album view, artist view...<br>
-- Album covers<br>
-- Media controls - more...<br>
-- Cookies? Remember song played...<br>
-- Playlist/queue<br>
-- Play non mp3 music<br>
-- Add song duration data to db<br>
-- File upload from website<br>
-- id3 metadata editing from website<br>
-- Admin page<br>
+- Better play/pause button
+- Better volume slider
+- Allow spaces in filename
+- MediaScan.py - split up reading directories, id3 tagging, and database into functions
+- Album view, artist view...
+- Album covers
+- Media controls - more...
+- Cookies? Remember song played...
+- Playlist/queue
+- Play non mp3 music
+- Add song duration data to db?
+- File upload from website
+- id3 metadata editing from website
+- Admin page

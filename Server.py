@@ -18,7 +18,7 @@ class RequestHandler(http.server.BaseHTTPRequestHandler):
             parsed_url = urlparse(self.path)
             queries = parse_qs(parsed_url.query)
             self.full_path = os.getcwd() + parsed_url.path
-            
+
             # Run CGI file
             if os.path.isdir(self.full_path):
                 filename = self.full_path.split('/')[1]
@@ -30,9 +30,27 @@ class RequestHandler(http.server.BaseHTTPRequestHandler):
             # Send other file
             elif os.path.isfile(self.full_path):
                 try:
-                    with open(self.full_path, 'rb') as reader:
-                        content = reader.read()
-                    self.send_content(content)
+                    if 'Range' in self.headers:
+                        # Parse the Range header.
+                        range_header = self.headers['Range']
+                        file_size = os.path.getsize(self.full_path)
+                        start, end = range_header.split('=')[1].split('-')
+                        start = int(start)
+                        end = int(end) if end else file_size - 1
+                        # Read the requested range from the file.
+                        with open(self.full_path, 'rb') as f:
+                            f.seek(start)
+                            content = f.read(end - start + 1)
+                        # Send the requested range to the client.
+                        self.send_response(206)
+                        self.send_header('Content-Range', 'bytes {}-{}/{}'.format(start, end, file_size))
+                        self.send_header('Content-Length', len(content))
+                        self.end_headers()
+                        self.wfile.write(content)
+                    else:
+                        with open(self.full_path, 'rb') as reader:
+                            content = reader.read()
+                            self.send_content(content)
                 except IOError as msg:
                     msg = "'{0}' cannot be read: {1}".format(self.full_path, msg)
                     self.handle_error(msg)
