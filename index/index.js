@@ -1,87 +1,82 @@
-function loadSong(songId, filePath, songName, firstLoad=false) {
+// Audio player
+audio = document.querySelector("audio");
+audioSource = document.getElementById("audioSource");
+// Audio controls
+audioControls = document.getElementById("audioControls");
+playPauseButton = document.getElementById("playButton");
+songTitle = document.getElementById("currentSongTitle");
+volumeSlider = document.getElementById("volumeSlider");
+// Other
+body = document.querySelector("body");
+trackFilterInput = document.getElementById("trackFilterInput");
+trackList = document.getElementById("trackList");
+trackListRows = trackList.rows;
+
+
+function loadSong() {
+    songId = this.getAttribute("song_id");
+    filePath = this.getAttribute("file_path");
+    songName = this.getAttribute("song_name");
+
     // Update audio player source - load the new song and play it
-    audioSource = document.getElementById("audioSource");
-    audio = document.getElementById("player");
     audioSource.setAttribute("src", filePath);
     audio.load();
-    if (!firstLoad) audio.play();
+    audio.play();
 
     // Update song name in media controls area
     songName = songName == "" ? filePath : songName;
-    songTitle = document.getElementById("currentSongTitle");
     songTitle.innerHTML = songName;
 
     // Make media controls visible
-    document.getElementById("audioControls").style.display = "";
+    audioControls.style.display = "";
 
     // Update URL to match song that is now playing
     newUrl = window.location.origin + "/index?song=" + songId;
     history.pushState({}, songName, newUrl);
 }
+document.querySelectorAll('#trackList tr:not(.header)').forEach(e => e.addEventListener("click", loadSong));
 
-function filterTracks() {
-    var input, filter, table, tr, td, i, txtValue;
-    input = document.getElementById("trackFilterInput");
-    filter = input.value.toUpperCase();
-    table = document.getElementById("trackList");
-    tr = table.getElementsByTagName("tr");
+trackFilterInput.addEventListener("keyup", () => {
+    filter = trackFilterInput.value.toUpperCase();
 
-    for (i = 0; i < tr.length; i++) {
-        td = tr[i].getElementsByTagName("td")[0];
+    for (i = 0; i < trackListRows.length; i++) {
+        td = trackListRows[i].getElementsByTagName("td")[0];
         if (td) {
             txtValue = td.textContent || td.innerText;
             if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                tr[i].style.display = "";
+                trackListRows[i].style.display = "";
             } else {
-                tr[i].style.display = "none";
+                trackListRows[i].style.display = "none";
             }
         }
     }
-}
+});
 
-function sortTracks(sortBy) {
-    var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
-    table = document.getElementById("trackList");
+function sortTracks() {
+    sortBy = this.getAttribute("sort_by")
+    switchcount = 0;
     switching = true;
-    // Set the sorting direction to ascending:
     dir = "asc";
-    /* Make a loop that will continue until
-    no switching has been done: */
+
     while (switching) {
-        // Start by saying: no switching is done:
         switching = false;
-        rows = table.rows;
-        /* Loop through all table rows (except the
-        first, which contains table headers): */
-        for (i = 1; i < (rows.length - 1); i++) {
-            // Start by saying there should be no switching:
+        // Loop through all rows except header
+        for (i = 1; i < (trackListRows.length - 1); i++) {
             shouldSwitch = false;
-            /* Get the two elements you want to compare,
-            one from current row and one from the next: */
-            x = rows[i].getElementsByTagName("TD")[sortBy];
-            y = rows[i + 1].getElementsByTagName("TD")[sortBy];
-            /* Check if the two rows should switch place,
-            based on the direction, asc or desc: */
-            if (dir == "asc") {
-                if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
-                    // If so, mark as a switch and break the loop:
-                    shouldSwitch = true;
-                    break;
-                }
-            } else if (dir == "desc") {
-                if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
-                    // If so, mark as a switch and break the loop:
-                    shouldSwitch = true;
-                    break;
-                }
+            x = trackListRows[i].getElementsByTagName("TD")[sortBy];
+            y = trackListRows[i + 1].getElementsByTagName("TD")[sortBy];
+
+            if (dir == "asc" && x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                shouldSwitch = true;
+                break;
+            } else if (dir == "desc" && x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                shouldSwitch = true;
+                break;
             }
         }
         if (shouldSwitch) {
-            /* If a switch has been marked, make the switch
-            and mark that a switch has been done: */
-            rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+            trackListRows[i].parentNode.insertBefore(trackListRows[i + 1], trackListRows[i]);
             switching = true;
-            // Each time a switch is done, increase this count by 1:
             switchcount++;
         } else {
             /* If no switching has been done AND the direction is "asc",
@@ -93,17 +88,43 @@ function sortTracks(sortBy) {
         }
     }
 }
+document.querySelectorAll('tr.header th').forEach(e => e.addEventListener("click", sortTracks));
 
-var isPlaying = false;
-function playAudio() {
-    player = document.getElementById("player");
-    player.paused ? player.play() : player.pause();
+playPauseButton.addEventListener("click", () => {
+    if (audio.paused) {
+        audio.play();
+        playPauseButton.setAttribute("class", "");
+    }
+    else {
+        audio.pause();
+        playPauseButton.setAttribute("class", "paused");
+    }
+});
 
-    document.getElementById("playButton").classList.toggle("paused");
-}
+volumeSlider.addEventListener("input", () => {
+    audio.volume = volumeSlider.value / 100.0;
+});
 
-function adjustVolume() {
-    volumeSlider = document.getElementById("volumeSlider");
-    player = document.getElementById("player");
-    player.volume = volumeSlider.value / 100.0;
+// Load first song
+songToLoad = body.getAttribute("song_to_load");
+if (songToLoad != "") {
+    for (i = 1; i < trackListRows.length; i++) {
+        if (songToLoad == trackListRows[i].getAttribute("song_id")) {
+            songId = trackListRows[i].getAttribute("song_id");
+            filePath = trackListRows[i].getAttribute("file_path");
+            songName = trackListRows[i].getAttribute("song_name");
+            break;
+        }
+    }
+
+    // Update audio player source - load the new song (don't play it)
+    audioSource.setAttribute("src", filePath);
+    audio.load();
+
+    // Update song name in media controls area
+    songName = songName == "" ? filePath : songName;
+    songTitle.innerHTML = songName;
+
+    // Make media controls visible
+    audioControls.style.display = "";
 }

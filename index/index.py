@@ -28,14 +28,8 @@ doc.stag('!DOCTYPE', html='')
 with tag('html'):
     with tag('head'):
         doc.stag('link', rel='stylesheet', href='index/index.css')
-        with tag('script', src='index/index.js'):
-            text('')
-    if 'song' in queries:
-        curSong = cur.execute("SELECT file_path FROM files WHERE id={0}".format(queries['song'])).fetchone()
-        onload = "loadSong(\"{0}\",\"{1}\",\"{2}\", true)".format(queries['song'], curSong[0].replace("\\", "\\\\"), getSongName(queries['song']))
-    else:
-        onload = ''
-    with tag('body', onload=onload):
+    songToLoad = queries['song'] if 'song' in queries else ''
+    with tag('body', song_to_load=songToLoad):
         with tag('div', klass="header"):
             with tag('a', href="#", klass="logo"):
                 text("Media Server")
@@ -44,20 +38,20 @@ with tag('html'):
                     text("Settings")
         with tag('h2'):
             text('Tracks')
-        doc.stag('input', type="text", id="trackFilterInput", onkeyup="filterTracks()", placeholder="Search for track...")
+        doc.stag('input', type="text", id="trackFilterInput", placeholder="Search for track...")
         with tag('table', id='trackList'):
             with tag('tr', klass='header'):
-                with tag('th', onclick="sortTracks(0)"):
+                with tag('th', sort_by="0"):
                     text("Title")
-                with tag('th', onclick="sortTracks(1)"):
+                with tag('th', sort_by="1"):
                     text("Artist")
-                with tag('th', onclick="sortTracks(2)"):
+                with tag('th', sort_by="2"):
                     text("Album")
             for song in cur.execute("SELECT id, file_path, title, artist, album FROM files").fetchall():
                 songId = song[0]
                 filePath = str(song[1]).replace("\\", "\\\\")
                 songName = song[2]
-                with tag('tr', onclick='loadSong(\"{0}\",\"{1}\",\"{2}\")'.format(songId, filePath, songName)):
+                with tag('tr', song_id=songId, file_path=filePath, song_name=songName):
                     with tag('td'):
                         text(str(getSongName(song[0])))
                     with tag('td'):
@@ -65,14 +59,16 @@ with tag('html'):
                     with tag('td'):
                         text(song[4])
         with tag('div', klass="footer"):
-            with tag('audio', id="player"):
+            with tag('audio'):
                 doc.stag('source', id='audioSource')
             with tag('h3', id="currentSongTitle"):
                 text('')
             with tag('div', id="audioControls", style="display: none;"):
-                with tag('button', id="playButton", onclick="playAudio()"):
+                with tag('button', id="playButton"):
                     text('Play/Pause')
-                doc.stag('input', type="range", min="0", max="100", value="100", klass="volumeSlider", id="volumeSlider", oninput="adjustVolume()")
+                doc.stag('input', type="range", min="0", max="100", value="100", klass="volumeSlider", id="volumeSlider")
+        with tag('script', src='index/index.js'):
+            text('')
 
 # Returning HTML results
 print(doc.getvalue())
