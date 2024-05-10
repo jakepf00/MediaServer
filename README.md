@@ -26,7 +26,9 @@ Navigate to localhost:8080/index in a web browser to access your music library.
 
 - Better play/pause button
 - Better volume slider
-- Timeline seek slider
+- Seek slider - fix
+- Seek slider - display buffered amount
+- Media Session API
 - Allow spaces in filename
 - MediaScan.py - split up reading directories, id3 tagging, and database into functions
 - Album view, artist view...

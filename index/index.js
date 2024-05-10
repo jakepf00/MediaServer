@@ -1,16 +1,20 @@
 // Audio player
-audio = document.querySelector("audio");
-audioSource = document.getElementById("audioSource");
+const audio = document.querySelector("audio");
+const audioSource = document.getElementById("audioSource");
 // Audio controls
-audioControls = document.getElementById("audioControls");
-playPauseButton = document.getElementById("playButton");
-songTitle = document.getElementById("currentSongTitle");
-volumeSlider = document.getElementById("volumeSlider");
+const audioControls = document.getElementById("audioControls");
+const audioPlayerContainer = document.getElementById("audio-player-container");
+const currentTimeContainer = document.getElementById("current-time");
+const durationContainer = document.getElementById("duration");
+const playPauseButton = document.getElementById("playButton");
+const seekSlider = document.getElementById("seek-slider");
+const songTitle = document.getElementById("currentSongTitle");
+const volumeSlider = document.getElementById("volumeSlider");
 // Other
-body = document.querySelector("body");
-trackFilterInput = document.getElementById("trackFilterInput");
-trackList = document.getElementById("trackList");
-trackListRows = trackList.rows;
+const body = document.querySelector("body");
+const trackFilterInput = document.getElementById("trackFilterInput");
+const trackList = document.getElementById("trackList");
+const trackListRows = trackList.rows;
 
 
 function loadSong() {
@@ -128,3 +132,40 @@ if (songToLoad != "") {
     // Make media controls visible
     audioControls.style.display = "";
 }
+
+const calculateTime = (secs) => {
+    const minutes = Math.floor(secs / 60);
+    const seconds = Math.floor(secs % 60);
+    const returnedSeconds = seconds < 10 ? `0${seconds}` : `${seconds}`;
+    return `${minutes}:${returnedSeconds}`;
+}
+
+const displayDuration = () => {
+    durationContainer.textContent = calculateTime(audio.duration);
+}
+
+const setSliderMax = () => {
+    seekSlider.max = Math.floor(audio.duration);
+}
+
+if (audio.readyState > 0) {
+    displayDuration();
+    setSliderMax();
+} else {
+    audio.addEventListener("loadedmetadata", () => {
+        displayDuration();
+        setSliderMax();
+    });
+}
+
+seekSlider.addEventListener('input', () => {
+    currentTimeContainer.textContent = calculateTime(seekSlider.value);
+});
+
+seekSlider.addEventListener('change', () => {
+    audio.currentTime = seekSlider.value;
+});
+
+audio.addEventListener('timeupdate', () => {
+    seekSlider.value = Math.floor(audio.currentTime);
+});

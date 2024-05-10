@@ -58,14 +58,19 @@ with tag('html'):
                         text(song[3])
                     with tag('td'):
                         text(song[4])
-        with tag('div', klass="footer"):
-            with tag('audio'):
+        with tag('div', klass="footer", id="audio-player-container"):
+            with tag('audio', preload="metadata"):
                 doc.stag('source', id='audioSource')
             with tag('h3', id="currentSongTitle"):
                 text('')
             with tag('div', id="audioControls", style="display: none;"):
                 with tag('button', id="playButton"):
                     text('Play/Pause')
+                with tag('span', id="current-time", klass="time"):
+                    text("0:00")
+                doc.stag('input', type="range", min="0", max="100", value="0", id="seek-slider")
+                with tag('span', id="duration", klass="time"):
+                    text("0:00")
                 doc.stag('input', type="range", min="0", max="100", value="100", klass="volumeSlider", id="volumeSlider")
         with tag('script', src='index/index.js'):
             text('')
