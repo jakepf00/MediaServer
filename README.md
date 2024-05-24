@@ -24,20 +24,31 @@ Navigate to localhost:8080/index in a web browser to access your music library.
 
 # Planned Features/Fixes
 
+### Media Controls
 - Better play/pause button
 - Better volume slider
 - Seek slider - fix
 - Seek slider - display buffered amount
-- Media Session API
+
+### Media Scanning
 - Allow spaces in filename
 - MediaScan.py - split up reading directories, id3 tagging, and database into functions
+- Add song duration data to db?
+- Use file structure/naming to help with music tagging in DB
+
+### Admin
+- Admin page
+- File upload from website
+- id3 metadata editing from website
+- Select library root folder
+- Allow rescanning files/metadata
+
+### Other
 - Album view, artist view...
 - Album covers
-- Media controls - more...
 - Cookies? Remember song played...
 - Playlist/queue
 - Play non mp3 music
-- Add song duration data to db?
-- File upload from website
-- id3 metadata editing from website
-- Admin page
+- Media Session API
+- HTTPS?
+- CSS - extract duplicate into central file?

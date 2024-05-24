@@ -34,7 +34,7 @@ with tag('html'):
             with tag('a', href="#", klass="logo"):
                 text("Media Server")
             with tag('div', klass="header-right"):
-                with tag('a', href="#"):
+                with tag('a', href="admin"):
                     text("Settings")
         with tag('h2'):
             text('Tracks')
