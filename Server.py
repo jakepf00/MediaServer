@@ -1,5 +1,7 @@
 import http.server
+import json
 import os
+from pathlib import Path
 from urllib.parse import urlparse, parse_qs
 
 class RequestHandler(http.server.BaseHTTPRequestHandler):
@@ -19,8 +21,19 @@ class RequestHandler(http.server.BaseHTTPRequestHandler):
             queries = parse_qs(parsed_url.query)
             self.full_path = os.getcwd() + parsed_url.path
 
+            # Send file directory
+            if parsed_url.path == '/files':
+                self.send_response(200)
+                self.send_header('Content-type', 'application/json')
+                self.end_headers()
+                if 'directory' in queries.keys():
+                    directory = os.path.join(Path.home(), queries['directory'][0])
+                else:
+                    directory = Path.home()
+                files = [d for d in os.listdir(directory) if os.path.isdir(os.path.join(directory, d))]
+                self.wfile.write(json.dumps(files).encode('utf-8'))
             # Run CGI file
-            if os.path.isdir(self.full_path):
+            elif os.path.isdir(self.full_path):
                 filename = self.full_path.split('/')[1]
                 cmd = "python " + self.full_path + "/" + filename + ".py " + " ".join([key + "=" + val[0] for key, val in queries.items()])
                 process = os.popen(cmd)

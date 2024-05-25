@@ -37,10 +37,10 @@ Navigate to localhost:8080/index in a web browser to access your music library.
 - Use file structure/naming to help with music tagging in DB
 
 ### Admin
-- Admin page
 - File upload from website
 - id3 metadata editing from website
-- Select library root folder
+- Select library root folder (and actually use it)
+- Allow spaces in media directory path
 - Allow rescanning files/metadata
 
 ### Other
