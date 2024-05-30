@@ -52,3 +52,4 @@ Navigate to localhost:8080/index in a web browser to access your music library.
 - Media Session API
 - HTTPS?
 - CSS - extract duplicate into central file?
+- gitignore

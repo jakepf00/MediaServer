@@ -1,6 +1,7 @@
 import http.server
 import json
 import os
+from io import BytesIO
 from pathlib import Path
 from urllib.parse import urlparse, parse_qs
 
@@ -71,6 +72,27 @@ class RequestHandler(http.server.BaseHTTPRequestHandler):
         # Handle errors
         except Exception as msg:
             self.handle_error(msg)
+    
+    def do_POST(self):
+        content_length = int(self.headers['Content-Length'])
+        body = self.rfile.read(content_length)
+        self.send_response(200)
+        self.end_headers()
+        responseBytes = BytesIO()
+        responseBytes.write(body)
+        response = json.loads(responseBytes.getvalue())
+
+        if "media-directory" in response.keys():
+            if os.path.exists("settings.json"):
+                with open("settings.json", "r") as settingsFile:
+                    settingsJson = json.load(settingsFile)
+            else:
+                settingsJson = {}
+            settingsJson["media-directory"] = response["media-directory"]
+            with open("settings.json", "w") as settingsFile:
+                settingsJson = json.dump(settingsJson, settingsFile, indent=4)
+        
+        self.wfile.write(responseBytes.getvalue())
 
     def handle_error(self, msg):
         content = self.Error_Page.format(path = self.path, msg = msg).encode("utf-8")

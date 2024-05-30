@@ -30,7 +30,14 @@ function selectFile(file) {
 }
 
 selectButton.addEventListener("click", () => {
-    alert('You selected: ' + currentDir.innerText);
+    // Sending and receiving data in JSON format using POST method
+    var xhr = new XMLHttpRequest();
+    var url = "/set-media-directory";
+    xhr.open("POST", url, true);
+    xhr.setRequestHeader("Content-Type", "application/json");
+    var data = JSON.stringify({ "media-directory": currentDir.innerText });
+    xhr.send(data);
+
     currentDir.innerText = "";
     document.getElementById("fileSelector").style.display = "none";
 });
