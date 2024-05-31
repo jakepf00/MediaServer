@@ -88,7 +88,7 @@ class RequestHandler(http.server.BaseHTTPRequestHandler):
                     settingsJson = json.load(settingsFile)
             else:
                 settingsJson = {}
-            settingsJson["media-directory"] = response["media-directory"]
+            settingsJson["media-directory"] = os.path.relpath(os.path.join(Path.home(), response["media-directory"]).replace("\\", "/"), os.getcwd())
             with open("settings.json", "w") as settingsFile:
                 settingsJson = json.dump(settingsJson, settingsFile, indent=4)
         

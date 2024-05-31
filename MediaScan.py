@@ -1,10 +1,18 @@
+import json
 import os
 import sqlite3
 from mutagen.id3 import ID3NoHeaderError
 from mutagen.id3 import ID3
 
-directory = ["media"]
+directory = []
+if os.path.exists("settings.json"):
+    with open("settings.json", "r") as settingsFile:
+        settingsJson = json.load(settingsFile)
+        if "media-directory" in settingsJson.keys():
+            directory.append(settingsJson["media-directory"])
+
 results = []
+
 while len(directory) > 0:
     for path in os.listdir(directory[0]):
         full_path = os.path.join(directory[0], path)
