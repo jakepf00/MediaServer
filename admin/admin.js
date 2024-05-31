@@ -2,6 +2,7 @@ const selectRootFolderButton = document.getElementById("selectRootFolderButton")
 const currentDir = document.getElementById("currentDir");
 const selectButton = document.getElementById("selectButton");
 const cancelButton = document.getElementById("cancelButton");
+const fileSelectorModal = document.getElementById("fileSelectorModal");
 
 function fetchFiles() {
     if (currentDir.innerText == "") fetchUrl = "/files";
@@ -18,7 +19,7 @@ function fetchFiles() {
                 listItem.onclick = () => selectFile(file);
                 fileList.appendChild(listItem);
             });
-            document.getElementById("fileSelector").style.display = "block";
+            fileSelectorModal.style.display = "block";
         });
 }
 
@@ -39,10 +40,10 @@ selectButton.addEventListener("click", () => {
     xhr.send(data);
 
     currentDir.innerText = "";
-    document.getElementById("fileSelector").style.display = "none";
+    fileSelectorModal.style.display = "none";
 });
 
 cancelButton.addEventListener("click", () => {
     currentDir.innerText = "";
-    document.getElementById("fileSelector").style.display = "none";
+    fileSelectorModal.style.display = "none";
 });

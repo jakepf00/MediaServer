@@ -17,15 +17,16 @@ with tag('html'):
                     text("Settings")
         with tag('button', id="selectRootFolderButton"):
             text('Select library root folder')
-        with tag('div', id="fileSelector", style="display:none;"):
-            with tag('ul', id="fileList"):
-                text('')
-            with tag('p', id="currentDir"):
-                text('')
-            with tag('button', id="selectButton"):
-                text('Select')
-            with tag('button', id="cancelButton"):
-                text('Cancel')
+        with tag('div', id="fileSelectorModal", klass="modal"):
+            with tag('div', klass="modal-content"):
+                with tag('ul', id="fileList"):
+                    text('')
+                with tag('p', id="currentDir"):
+                    text('')
+                with tag('button', id="selectButton"):
+                    text('Select')
+                with tag('button', id="cancelButton"):
+                    text('Cancel')
         with tag('script', src='admin/admin.js'):
             text('')
 
