@@ -1,4 +1,5 @@
 const selectRootFolderButton = document.getElementById("selectRootFolderButton");
+const rescanLibraryButton = document.getElementById("rescanLibraryButton");
 const currentDir = document.getElementById("currentDir");
 const selectButton = document.getElementById("selectButton");
 const cancelButton = document.getElementById("cancelButton");
@@ -25,6 +26,18 @@ function fetchFiles() {
 
 selectRootFolderButton.addEventListener("click", fetchFiles);
 
+function rescanLibrary() {
+    // Sending and receiving data in JSON format using POST method
+    var xhr = new XMLHttpRequest();
+    var url = "/rescan-library";
+    xhr.open("POST", url, true);
+    xhr.setRequestHeader("Content-Type", "application/json");
+    var data = JSON.stringify({ "rescan-library": "true" });
+    xhr.send(data);
+}
+
+rescanLibraryButton.addEventListener("click", rescanLibrary)
+
 function selectFile(file) {
     currentDir.innerText += file + '/';
     fetchFiles();
@@ -39,8 +52,12 @@ selectButton.addEventListener("click", () => {
     var data = JSON.stringify({ "media-directory": currentDir.innerText });
     xhr.send(data);
 
+    // Set frontend stuff
     currentDir.innerText = "";
     fileSelectorModal.style.display = "none";
+
+    // Rescan library automatically when directory changes
+    rescanLibrary();
 });
 
 cancelButton.addEventListener("click", () => {

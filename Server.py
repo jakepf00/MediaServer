@@ -82,7 +82,7 @@ class RequestHandler(http.server.BaseHTTPRequestHandler):
         responseBytes.write(body)
         response = json.loads(responseBytes.getvalue())
 
-        if "media-directory" in response.keys():
+        if self.path == "/set-media-directory":
             if os.path.exists("settings.json"):
                 with open("settings.json", "r") as settingsFile:
                     settingsJson = json.load(settingsFile)
@@ -91,6 +91,13 @@ class RequestHandler(http.server.BaseHTTPRequestHandler):
             settingsJson["media-directory"] = os.path.relpath(os.path.join(Path.home(), response["media-directory"]).replace("\\", "/"), os.getcwd())
             with open("settings.json", "w") as settingsFile:
                 settingsJson = json.dump(settingsJson, settingsFile, indent=4)
+        elif self.path == "/rescan-library":
+            if os.path.exists("media.db"):
+                os.remove("media.db")
+            process = os.popen("python MediaScan.py")
+            data = process.read().encode("utf-8")
+            print(data)
+            process.close()
         
         self.wfile.write(responseBytes.getvalue())
 
