@@ -28,6 +28,7 @@ doc.stag('!DOCTYPE', html='')
 with tag('html'):
     with tag('head'):
         doc.stag('link', rel='stylesheet', href='index/index.css')
+        doc.stag('link', rel='stylesheet', href='shared/styles.css')
     songToLoad = queries['song'] if 'song' in queries else ''
     with tag('body', song_to_load=songToLoad):
         with tag('div', klass="header"):

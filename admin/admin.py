@@ -8,6 +8,7 @@ doc.stag('!DOCTYPE', html='')
 with tag('html'):
     with tag('head'):
         doc.stag('link', rel='stylesheet', href='admin/admin.css')
+        doc.stag('link', rel='stylesheet', href='shared/styles.css')
     with tag('body'):
         with tag('div', klass="header"):
             with tag('a', href="index", klass="logo"):
