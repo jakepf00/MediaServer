@@ -38,7 +38,13 @@ function loadSong() {
     newUrl = window.location.origin + "/index?song=" + songId;
     history.pushState({}, songName, newUrl);
 }
-document.querySelectorAll('#trackList tr:not(.header)').forEach(e => e.addEventListener("click", loadSong));
+document.querySelectorAll('.playSongButton').forEach(e => e.addEventListener("click", loadSong));
+
+function editSong() {
+    // TODO: display modal to edit song metadata
+    console.log("Edit song...")
+}
+document.querySelectorAll('.editSongButton').forEach(e => e.addEventListener("click", editSong));
 
 trackFilterInput.addEventListener("keyup", () => {
     filter = trackFilterInput.value.toUpperCase();
