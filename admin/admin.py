@@ -16,10 +16,11 @@ with tag('html'):
             with tag('div', klass="header-right"):
                 with tag('a', href="#"):
                     text("Settings")
-        with tag('button', id="selectRootFolderButton"):
-            text('Select library root folder')
-        with tag('button', id="rescanLibraryButton"):
-            text('Rescan library files')
+        with tag('div', klass="content"):
+            with tag('button', id="selectRootFolderButton"):
+                text('Select library root folder')
+            with tag('button', id="rescanLibraryButton"):
+                text('Rescan library files')
         with tag('div', id="fileSelectorModal", klass="modal"):
             with tag('div', klass="modal-content"):
                 with tag('ul', id="fileList"):

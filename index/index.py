@@ -37,38 +37,39 @@ with tag('html'):
             with tag('div', klass="header-right"):
                 with tag('a', href="admin"):
                     text("Settings")
-        with tag('h2'):
-            text('Tracks')
-        doc.stag('input', type="text", id="trackFilterInput", placeholder="Search for track...")
-        with tag('table', id='trackList'):
-            with tag('tr', klass='header'):
-                with tag('th'):
-                    text()
-                with tag('th', sort_by="1"):
-                    text("Title")
-                with tag('th', sort_by="2"):
-                    text("Artist")
-                with tag('th', sort_by="3"):
-                    text("Album")
-                with tag('th'):
-                    text()
-            for song in cur.execute("SELECT id, file_path, title, artist, album FROM files").fetchall():
-                songId = song[0]
-                filePath = str(song[1]).replace("\\", "\\\\")
-                songName = song[2]
-                with tag('tr', song_id=songId, file_path=filePath, song_name=songName):
-                    with tag('td'):
-                        with tag('a', klass="playSongButton", song_id=songId, file_path=filePath, song_name=songName):
-                            text("Play")
-                    with tag('td'):
-                        text(str(getSongName(song[0])))
-                    with tag('td'):
-                        text(song[3])
-                    with tag('td'):
-                        text(song[4])
-                    with tag('td'):
-                        with tag('a', klass="editSongButton"):
-                            text("Edit")
+        with tag('div', klass="content"):
+            with tag('h2'):
+                text('Tracks')
+            doc.stag('input', type="text", id="trackFilterInput", placeholder="Search for track...")
+            with tag('table', id='trackList'):
+                with tag('tr', klass='tableHeader'):
+                    with tag('th'):
+                        text()
+                    with tag('th', sort_by="1"):
+                        text("Title")
+                    with tag('th', sort_by="2"):
+                        text("Artist")
+                    with tag('th', sort_by="3"):
+                        text("Album")
+                    with tag('th'):
+                        text()
+                for song in cur.execute("SELECT id, file_path, title, artist, album FROM files").fetchall():
+                    songId = song[0]
+                    filePath = str(song[1]).replace("\\", "\\\\")
+                    songName = song[2]
+                    with tag('tr', song_id=songId, file_path=filePath, song_name=songName):
+                        with tag('td'):
+                            with tag('a', klass="playSongButton", song_id=songId, file_path=filePath, song_name=songName):
+                                text("Play")
+                        with tag('td'):
+                            text(str(getSongName(song[0])))
+                        with tag('td'):
+                            text(song[3])
+                        with tag('td'):
+                            text(song[4])
+                        with tag('td'):
+                            with tag('a', klass="editSongButton"):
+                                text("Edit")
         with tag('div', klass="footer", id="audio-player-container"):
             with tag('audio', preload="metadata"):
                 doc.stag('source', id='audioSource')

@@ -1,8 +1,15 @@
 /* Header */
 .header {
     overflow: hidden;
-    background-color: #f1f1f1;
-    padding: 20px 10px;
+    background-color: lightgray;
+    margin: 0px;
+    position: absolute;
+    width: 100%;
+    height: 100px;
+    top: 0px;
+    right: 0px;
+    left: 0px;
+    z-index: 1000;
 }
 
 .header a {
@@ -45,4 +52,14 @@
     .header-right {
         float: none;
     }
+}
+
+.content {
+    overflow-y: auto;
+    position: absolute;
+    top: 100px;
+    bottom: 100px;
+    left: 0px;
+    right: 0px;
+    overflow: auto;
 }

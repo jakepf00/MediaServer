@@ -43,6 +43,8 @@ Navigate to localhost:8080/index in a web browser to access your music library.
 - Allow rescanning files/metadata
 
 ### Other
+- Make header look better
+- Fix header when page is narrow
 - Album view, artist view...
 - Album covers
 - Cookies? Remember song played...
@@ -50,5 +52,4 @@ Navigate to localhost:8080/index in a web browser to access your music library.
 - Play non mp3 music
 - Media Session API
 - HTTPS?
-- CSS - extract duplicate into central file?
 - Refactor server code - get/post methods handling too much
