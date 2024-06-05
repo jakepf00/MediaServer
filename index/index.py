@@ -56,7 +56,7 @@ with tag('html'):
                 songId = song[0]
                 filePath = str(song[1]).replace("\\", "\\\\")
                 songName = song[2]
-                with tag('tr'):
+                with tag('tr', song_id=songId, file_path=filePath, song_name=songName):
                     with tag('td'):
                         with tag('a', klass="playSongButton", song_id=songId, file_path=filePath, song_name=songName):
                             text("Play")
