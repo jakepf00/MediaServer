@@ -35,7 +35,7 @@ class RequestHandler(http.server.BaseHTTPRequestHandler):
                 self.wfile.write(json.dumps(files).encode('utf-8'))
             # Run CGI file
             elif os.path.isdir(self.full_path):
-                filename = self.full_path.split('/')[1]
+                filename = self.full_path.split('/')[-1]
                 cmd = "python " + self.full_path + "/" + filename + ".py " + " ".join([key + "=" + val[0] for key, val in queries.items()])
                 process = os.popen(cmd)
                 data = process.read().encode("utf-8")
