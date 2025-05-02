@@ -10,6 +10,8 @@ if os.path.exists("settings.json"):
         settingsJson = json.load(settingsFile)
         if "media-directory" in settingsJson.keys():
             directory.append(settingsJson["media-directory"])
+else:
+    directory.append("media")
 
 results = []
 
