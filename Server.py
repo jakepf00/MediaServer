@@ -20,7 +20,7 @@ class RequestHandler(http.server.BaseHTTPRequestHandler):
         try:
             parsed_url = urlparse(self.path)
             queries = parse_qs(parsed_url.query)
-            self.full_path = os.getcwd() + parsed_url.path
+            self.full_path = os.getcwd() + parsed_url.path.replace("%20", " ")
 
             # Send file directory
             if parsed_url.path == '/files':
