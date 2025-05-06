@@ -18,7 +18,13 @@ Web Server
 
 Place all media in a folder named 'media' at the root of the project (next to MediaScan.py and Server.py). Media can be organized in folders in any way you'd like, as all metadata is read from id3v2 tags on the files. Currently, only mp3 files are supported. Scan the media by running 'python MediaScan.py'<br>
 
-Once media is scanned, start the server by running 'python Server.py'<br>
+Create Python virtual environment: python -m venv env<br>
+
+Activate virtual environment: source env/bin/activate<br>
+
+Install requirements: pip install -r requirements.txt<br>
+
+Start the server by running 'python Server.py'<br>
 
 Navigate to localhost:8080/index in a web browser to access your music library.
 
@@ -31,7 +37,6 @@ Navigate to localhost:8080/index in a web browser to access your music library.
 - Seek slider - display buffered amount
 
 ### Media Scanning
-- Allow spaces in filename
 - MediaScan.py - split up reading directories, id3 tagging, and database into functions
 - Add song duration data to db?
 - Use file structure/naming to help with music tagging in DB
